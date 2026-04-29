@@ -1,4 +1,4 @@
 package co.vinni.Medicamento.resource;
 
-public class meciamentoResource {
+public class MedicamentoResource {
 }

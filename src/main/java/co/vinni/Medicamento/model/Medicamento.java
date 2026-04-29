@@ -1,4 +1,4 @@
 package co.vinni.Medicamento.model;
 
-public class medicamentoModel {
+public class Medicamento {
 }

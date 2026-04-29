@@ -1,4 +1,4 @@
 package co.vinni.Medicamento.repository;
 
-public class medicamentoRepository {
+public class MedicamentoRepository {
 }
