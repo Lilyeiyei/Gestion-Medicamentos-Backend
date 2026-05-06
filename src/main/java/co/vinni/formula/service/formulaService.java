@@ -6,6 +6,8 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 
+import java.util.List;
+
 @ApplicationScoped
 public class formulaService {
 
@@ -15,5 +17,9 @@ public class formulaService {
     @Transactional
     public void registrarFormula(formulaModel formula) {
         repository.persist(formula);
+    }
+
+    public List<formulaModel> listarTodas() {
+        return repository.listAll();
     }
 }

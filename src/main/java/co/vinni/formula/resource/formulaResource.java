@@ -10,6 +10,8 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import java.util.List;
+import jakarta.ws.rs.GET;
 
 @Path("/formulas")
 @Produces(MediaType.APPLICATION_JSON)
@@ -18,6 +20,11 @@ public class formulaResource {
 
     @Inject
     formulaService service;
+
+    @GET // <--- Esto es lo que falta para que salga en Swagger
+    public List<formulaModel> listar() {
+        return service.listarTodas();
+    }
 
     @POST
     public Response registrar(@Valid formulaModel formula) {
