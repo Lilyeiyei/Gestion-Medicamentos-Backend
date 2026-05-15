@@ -18,7 +18,18 @@ public class MedicamentoService {
     public Medicamento registrar(Medicamento medicamento){
 
         // VALIDACIONES
-        if(medicamento.nombreGenerico == null || medicamento.nombreGenerico.isEmpty()){
+
+        if(medicamento.id == null){
+            throw new WebApplicationException("ID obligatorio", 400);
+        }
+
+        Medicamento existeId = repository.findById(medicamento.id);
+
+        if(existeId != null){
+            throw new WebApplicationException("El ID ya existe", 400);
+        }
+
+        if(medicamento.nombreMedicamento == null || medicamento.nombreMedicamento.isEmpty()){
             throw new WebApplicationException("Nombre obligatorio", 400);
         }
 
@@ -48,7 +59,7 @@ public class MedicamentoService {
         }
 
         // VALIDAR DUPLICADO
-        Medicamento existe = repository.find("nombreGenerico", medicamento.nombreGenerico).firstResult();
+        Medicamento existe = repository.find("nombreMedicamento", medicamento.nombreMedicamento).firstResult();
 
         if(existe != null){
             throw new WebApplicationException("Medicamento ya se encuentra registrado", 400);
