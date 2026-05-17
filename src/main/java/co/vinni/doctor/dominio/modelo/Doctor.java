@@ -10,7 +10,7 @@ public class Doctor {
 
     public Doctor() {}
 
-    public Doctor(String cedula, String nombreCompleto, String especialidad, String correoelectronico, String telefono) {
+    public Doctor(String cedula, String nombreCompleto, String especialidad, String correoElectronico, String telefono) {
         this.cedula = cedula;
         this.nombreCompleto = nombreCompleto;
         this.especialidad = especialidad;

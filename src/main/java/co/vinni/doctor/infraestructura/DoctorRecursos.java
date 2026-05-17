@@ -35,8 +35,16 @@ public class DoctorRecursos {
     }
 
     @POST
-    public Response registrar(@Valid DoctorDto dto) {
+    public Response registrar(DoctorDto dto) {
         try {
+            if (dto.getCedula() == null || dto.getCedula().isBlank()) {
+                return Response.status(Response.Status.BAD_REQUEST)
+                        .entity("La cédula es obligatoria").build();
+            }
+            if (dto.getCorreoElectronico() == null || dto.getCorreoElectronico().isBlank()) {
+                return Response.status(Response.Status.BAD_REQUEST)
+                        .entity("El correo electrónico es obligatorio").build();
+            }
             Doctor doctor = new Doctor(dto.getCedula(), dto.getNombreCompleto(),
                     dto.getEspecialidad(), dto.getCorreoElectronico(), dto.getTelefono());
             Doctor nuevo = doctorServicio.registrarDoctor(doctor);
