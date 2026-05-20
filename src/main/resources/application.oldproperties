@@ -1,14 +1,6 @@
 quarkus.http.port=8620
+
 quarkus.datasource.db-kind=h2
 quarkus.datasource.jdbc.url=jdbc:h2:mem:equiposdb
+
 quarkus.hibernate-orm.generation=drop-and-create
-
-quarkus.http.cors=true
-quarkus.http.cors.origins=http://localhost:4200
-quarkus.http.cors.methods=GET,POST,PUT,DELETE,OPTIONS
-quarkus.http.cors.headers=Content-Type,Authorization,X-Requested-With
-
-quarkus.http.cors=true
-quarkus.http.cors.origins=http://localhost:4200
-quarkus.http.cors.methods=GET,POST,PUT,DELETE,OPTIONS
-quarkus.http.cors.headers=accept,authorization,content-type
