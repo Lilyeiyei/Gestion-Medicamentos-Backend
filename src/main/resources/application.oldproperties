@@ -1,6 +1,17 @@
-quarkus.http.port=8620
+# Configuración del servidor
+quarkus.http.port=8860
+quarkus.http.root-path=/kick
 
+# Configuración de Base de Datos (H2 en memoria)
 quarkus.datasource.db-kind=h2
-quarkus.datasource.jdbc.url=jdbc:h2:mem:equiposdb
-
+quarkus.datasource.jdbc.url=jdbc:h2:mem:medicamentosdb
 quarkus.hibernate-orm.generation=drop-and-create
+
+# Habilitar CORS para comunicación con Angular (Puerto 4200)
+quarkus.http.cors=true
+quarkus.http.cors.origins=http://localhost:4200
+quarkus.http.cors.methods=GET,POST,OPTIONS
+quarkus.http.cors.headers=Content-Type,Authorization
+
+# Configuración de Log y OpenAPI (Opcional)
+quarkus.log.console.format=%d{HH:mm:ss} %-5p [%c{2.}] (%t) %s%e%n
