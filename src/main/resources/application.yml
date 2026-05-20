@@ -1,16 +1,16 @@
 quarkus:
   application:
-    name: Gestion de Docentes
+    name: Gestion de Medicamentos
     version: 1.0-SNAPSHOT
 
   http:
-    port: 8860
+    port: 8620
     host: localhost
     root-path: kick
 
   cors:
     ~: true
-    origins: http://localhost:4200
+    origins: "http://localhost:4200"
     methods: GET,POST,PUT,DELETE,OPTIONS
     headers: Content-Type,Authorization,X-Requested-With,Accept
 
@@ -46,13 +46,15 @@ quarkus:
     enabled: true
     always-include: true
     path: "/swagger-ui"
-    title: "Gestion de docentes demo - Vinni"
+    title: "Gestion de medicamentos"
+    description: "API generado en Quarkus para gestion de medicamentos"
     version: "V1"
+    contact-name: "..."
 
 mp:
   openapi:
     extensions:
       smallrye:
         info:
-          title: "Gestion de docentes"
+          title: "Gestion de medicamentos"
           version: "1.1.0"
