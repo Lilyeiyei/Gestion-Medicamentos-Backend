@@ -5,7 +5,7 @@ quarkus:
 
   # HTTP
   http:
-    port: 8860
+    port: 8620
     host: localhost
     root-path: kick
     cors: true
