@@ -4,13 +4,13 @@ quarkus:
     version: 1.0-SNAPSHOT
 
   http:
-    port: 8620
-    host: localhost
+    port: ${PORT:8620}        # Render inyecta PORT; localmente usa 8620
+    host: 0.0.0.0             # OBLIGATORIO en Render (antes tenías localhost)
     root-path: kick
 
   cors:
     ~: true
-    origins: "http://localhost:4200"
+    origins: "http://localhost:4200,https://tu-frontend.onrender.com"  # agrega la URL de Angular cuando la tengas
     methods: GET,POST,PUT,DELETE,OPTIONS
     headers: Content-Type,Authorization,X-Requested-With,Accept
 
@@ -23,8 +23,7 @@ quarkus:
 
   hibernate-orm:
     schema-management:
-      strategy:
-        drop-and-create
+      strategy: drop-and-create
     log:
       sql: true
 
@@ -58,3 +57,31 @@ mp:
         info:
           title: "Gestion de medicamentos"
           version: "1.1.0"
+
+# ─────────────────────────────────────────────────────
+# PERFIL PRODUCCIÓN — solo activo cuando QUARKUS_PROFILE=prod
+# Render usará estas propiedades en lugar de las de arriba
+# ─────────────────────────────────────────────────────
+"%prod":
+  quarkus:
+    http:
+      port: ${PORT:8080}
+      host: 0.0.0.0
+      root-path: kick
+
+    datasource:
+      db-kind: h2
+      username: ${DB_USER:admin}
+      password: ${DB_PASSWORD:12345}
+      jdbc:
+        url: jdbc:h2:file:/app/data/gdocentes_db;DB_CLOSE_ON_EXIT=FALSE   # ruta absoluta en el contenedor
+
+    hibernate-orm:
+      schema-management:
+        strategy: update        # en prod NO uses drop-and-create, perderías datos
+      log:
+        sql: false              # menos ruido en logs de producción
+
+    log:
+      file:
+        enabled: false          # Render ya captura stdout, no necesitas archivo
