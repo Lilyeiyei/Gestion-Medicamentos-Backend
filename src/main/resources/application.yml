@@ -65,9 +65,9 @@ mp:
 "%prod":
   quarkus:
     http:
-      port: ${PORT:8080}        # Render inyecta PORT automáticamente
+      port: ${PORT:8080}
       host: 0.0.0.0
-      root-path: kick
+      # sin root-path en prod
 
     swagger-ui:
       enabled: true
@@ -91,6 +91,5 @@ mp:
       level: INFO
       console:
         enabled: true
-        format: "%d{yyyy-MM-dd HH:mm:ss,SSS} %-5p [%c{3.}] (%t) %s%e%n"
       file:
         enabled: false
