@@ -1,45 +1,27 @@
-# ─────────────────────────────────────────────
-# STAGE 1: Build con Maven + JDK 21
-# ─────────────────────────────────────────────
-FROM eclipse-temurin:21-jdk AS builder
+# ETAPA 1: Compilación
+FROM maven:3.9.6-eclipse-temurin-21 AS build
+WORKDIR /home/app
 
-WORKDIR /app
+# Copiar todo el proyecto
+COPY . .
+USER root
 
-# Copiar archivos de Maven primero (aprovecha el cache de capas)
-COPY pom.xml .
-COPY .mvn/ .mvn/
-COPY mvnw .
+# Build directo (pom.xml ya está en la raíz)
+RUN mvn clean package -DskipTests -Dquarkus.package.jar.type=fast-jar
 
-# Dar permisos al wrapper
-RUN chmod +x mvnw
+# ETAPA 2: Imagen de ejecución
+FROM registry.access.redhat.com/ubi9/openjdk-21-runtime:1.24
 
-# Descargar dependencias en capa separada (cache-friendly)
-RUN ./mvnw dependency:go-offline -q
+ENV LANGUAGE='en_US:en'
 
-# Copiar el código fuente
-COPY src/ src/
+# Copiar artefactos de Quarkus
+COPY --from=build /home/app/target/quarkus-app/ /deployments/
 
-# Build del JAR en modo JVM (fast-jar de Quarkus)
-RUN ./mvnw package -DskipTests -Dquarkus.package.jar.type=fast-jar
-
-# ─────────────────────────────────────────────
-# STAGE 2: Runtime liviano con JRE 21
-# ─────────────────────────────────────────────
-FROM eclipse-temurin:21-jre
-
-WORKDIR /app
-
-# Copiar el output del build (fast-jar de Quarkus)
-COPY --from=builder /app/target/quarkus-app/lib/ ./lib/
-COPY --from=builder /app/target/quarkus-app/*.jar ./
-COPY --from=builder /app/target/quarkus-app/app/ ./app/
-COPY --from=builder /app/target/quarkus-app/quarkus/ ./quarkus/
-
-# Puerto que expone Quarkus (default 8080)
 EXPOSE 8080
 
-# Variable de entorno para Render
-ENV JAVA_OPTS="-Dquarkus.http.host=0.0.0.0 -Djava.util.logging.manager=org.jboss.logmanager.LogManager"
+USER 185
 
-# Comando de arranque
-ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar quarkus-run.jar"]
+ENV JAVA_OPTS="-Dquarkus.http.host=0.0.0.0 -Djava.util.logging.manager=org.jboss.logmanager.LogManager"
+ENV JAVA_APP_JAR="/deployments/quarkus-run.jar"
+
+ENTRYPOINT [ "/opt/jboss/container/java/run/run-java.sh" ]
