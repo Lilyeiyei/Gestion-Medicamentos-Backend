@@ -1,29 +1,28 @@
-# Usar imagen oficial de Maven con Java 21
+# ETAPA 1: Compilación
 FROM maven:3.9.6-eclipse-temurin-21 AS build
-WORKDIR /app
+WORKDIR /home/app
 
-# 1. Copiamos PRIMERO el pom.xml para aprovechar la caché de Docker
-COPY pom.xml .
-
-# 2. En lugar de buscar la carpeta "/src", copiamos TODO lo que esté en la raíz del proyecto
-# Esto incluye carpetas con mayúsculas/minúsculas (src, Src, SRC) de forma automática.
+# Copiamos absolutamente todo lo que venga de GitHub sin validar nada aún
 COPY . .
 
-# Compilar omitiendo los tests para el despliegue rápido
-RUN mvn clean package -DskipTests
+USER root
 
-# Paso 2: Imagen ligera para ejecución
-FROM eclipse-temurin:21-jre-alpine
+# Tu script estrella: Busca el pom.xml donde sea que esté y acomoda el proyecto
+RUN ACTUAL_PATH=$(find . -iname "pom.xml" -exec dirname {} \; | head -n 1) && \
+    echo "Proyecto encontrado en: $ACTUAL_PATH" && \
+    cp -r $ACTUAL_PATH/. . || true && \
+    mvn clean package -DskipTests
+
+# ETAPA 2: Imagen de ejecución oficial de RedHat para Quarkus
+FROM registry.access.redhat.com/ubi9/openjdk-21-runtime:1.24
 ENV LANGUAGE='en_US:en'
-WORKDIR /deployments
 
-# Copiar el resultado del paso de build
-COPY --from=build /app/target/quarkus-app/lib/ /deployments/lib/
-COPY --from=build /app/target/quarkus-app/*.jar /deployments/
-COPY --from=build /app/target/quarkus-app/app/ /deployments/app/
-COPY --from=build /app/target/quarkus-app/quarkus/ /deployments/quarkus/
+# Copiamos la carpeta completa de la aplicación generada
+COPY --from=build /home/app/target/quarkus-app/ /deployments/
 
 EXPOSE 8080
-ENV JAVA_OPTIONS="-Dquarkus.http.host=0.0.0.0 -Djava.util.logging.manager=org.jboss.logmanager.LogManager"
+USER 185
+ENV JAVA_OPTS="-Dquarkus.http.host=0.0.0.0 -Djava.util.logging.manager=org.jboss.logmanager.LogManager"
+ENV JAVA_APP_JAR="/deployments/quarkus-run.jar"
 
-CMD ["java", "-jar", "/deployments/quarkus-run.jar"]
+ENTRYPOINT [ "/opt/jboss/container/java/run/run-java.sh" ]
