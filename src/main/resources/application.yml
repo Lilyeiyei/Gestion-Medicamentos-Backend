@@ -53,7 +53,10 @@ mp:
     http:
       port: ${PORT:8080}
       host: 0.0.0.0
-      cors: true # Habilitado para permitir peticiones del frontend
+      cors: true
+      cors.origins: "https://gestion-medicamentos-frontend.onrender.com"
+      cors.methods: "GET,POST,PUT,DELETE,OPTIONS"
+      cors.headers: "accept, authorization, content-type, x-requested-with"
 
     datasource:
       db-kind: h2
