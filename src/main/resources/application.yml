@@ -1,0 +1,60 @@
+quarkus:
+  application:
+    name: Gestion de Medicamentos
+    version: 1.0-SNAPSHOT
+
+  http:
+    port: 8620
+    host: localhost
+    root-path: kick
+
+  cors:
+    ~: true
+    origins: "http://localhost:4200"
+    methods: GET,POST,PUT,DELETE,OPTIONS
+    headers: Content-Type,Authorization,X-Requested-With,Accept
+
+  datasource:
+    db-kind: h2
+    username: admin
+    password: 12345
+    jdbc:
+      file: ./data/gdocentes_db
+
+  hibernate-orm:
+    schema-management:
+      strategy:
+        drop-and-create
+    log:
+      sql: true
+
+  log:
+    level: INFO
+    console:
+      enabled: true
+      format: "%d{yyyy-MM-dd HH:mm:ss,SSS} %-5p [%c{3.}] (%t) %s%e%n"
+    file:
+      enabled: true
+      path: logs/gestudiantes.log
+      format: "%d{yyyy-MM-dd HH:mm:ss,SSS} %-5p [%c{3.}] (%t) %s%e%n"
+      rotation:
+        max-file-size: 5M
+        max-backup-index: 5
+        file-suffix: yyyy-MM-dd
+
+  swagger-ui:
+    enabled: true
+    always-include: true
+    path: "/swagger-ui"
+    title: "Gestion de medicamentos"
+    description: "API generado en Quarkus para gestion de medicamentos"
+    version: "V1"
+    contact-name: "..."
+
+mp:
+  openapi:
+    extensions:
+      smallrye:
+        info:
+          title: "Gestion de medicamentos"
+          version: "1.1.0"
