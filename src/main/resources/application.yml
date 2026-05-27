@@ -6,7 +6,7 @@ quarkus:
   http:
     port: 8620
     host: localhost
-    root-path: kick
+    # Se eliminó el root-path para que responda en la raíz (ej: /formulas)
 
   datasource:
     db-kind: h2
@@ -53,7 +53,7 @@ mp:
     http:
       port: ${PORT:8080}
       host: 0.0.0.0
-      cors: false
+      cors: true # Habilitado para permitir peticiones del frontend
 
     datasource:
       db-kind: h2
