@@ -1,5 +1,9 @@
-*
-!target/*-runner
-!target/*-runner.jar
-!target/lib/*
-!target/quarkus-app/*
+# Excluir carpetas que no necesita el build
+.idea/
+.git/
+logs/
+target/
+front-medicamentos/
+*.md
+
+# NO excluir: src/, .mvn/, mvnw, pom.xml
