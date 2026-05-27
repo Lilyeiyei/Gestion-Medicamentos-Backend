@@ -67,7 +67,15 @@ mp:
     http:
       port: ${PORT:8080}
       host: 0.0.0.0
-      # sin root-path en prod
+
+    http:
+      cors:
+        ~: true
+        origins: "https://gestion-medicamentos-frontend.onrender.com"
+        methods: GET,POST,PUT,DELETE,OPTIONS
+        headers: Content-Type,Authorization,X-Requested-With,Accept,Origin
+        exposed-headers: Content-Type,Authorization
+        access-control-allow-credentials: false
 
     swagger-ui:
       enabled: true
