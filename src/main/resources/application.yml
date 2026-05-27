@@ -64,24 +64,6 @@ mp:
 # ─────────────────────────────────────────────────────
 "%prod":
   quarkus:
-    http:
-      port: ${PORT:8080}
-      host: 0.0.0.0
-      root-path: kick
-
-    datasource:
-      db-kind: h2
-      username: ${DB_USER:admin}
-      password: ${DB_PASSWORD:12345}
-      jdbc:
-        url: jdbc:h2:file:/app/data/gdocentes_db;DB_CLOSE_ON_EXIT=FALSE   # ruta absoluta en el contenedor
-
     hibernate-orm:
       schema-management:
-        strategy: update        # en prod NO uses drop-and-create, perderías datos
-      log:
-        sql: false              # menos ruido en logs de producción
-
-    log:
-      file:
-        enabled: false          # Render ya captura stdout, no necesitas archivo
+        strategy: drop-and-create   # OK porque la app arranca vacía
