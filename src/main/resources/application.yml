@@ -4,15 +4,9 @@ quarkus:
     version: 1.0-SNAPSHOT
 
   http:
-    port: ${PORT:8620}        # Render inyecta PORT; localmente usa 8620
-    host: 0.0.0.0             # OBLIGATORIO en Render (antes tenías localhost)
+    port: 8620
+    host: localhost
     root-path: kick
-
-  cors:
-    ~: true
-    origins: "http://localhost:4200,https://tu-frontend.onrender.com"  # agrega la URL de Angular cuando la tengas
-    methods: GET,POST,PUT,DELETE,OPTIONS
-    headers: Content-Type,Authorization,X-Requested-With,Accept
 
   datasource:
     db-kind: h2
@@ -45,10 +39,6 @@ quarkus:
     enabled: true
     always-include: true
     path: "/swagger-ui"
-    title: "Gestion de medicamentos"
-    description: "API generado en Quarkus para gestion de medicamentos"
-    version: "V1"
-    contact-name: "..."
 
 mp:
   openapi:
@@ -58,29 +48,11 @@ mp:
           title: "Gestion de medicamentos"
           version: "1.1.0"
 
-# ─────────────────────────────────────────────────────
-# PERFIL PRODUCCIÓN — solo activo cuando QUARKUS_PROFILE=prod
-# Render usará estas propiedades en lugar de las de arriba
-# ─────────────────────────────────────────────────────
 "%prod":
   quarkus:
     http:
       port: ${PORT:8080}
       host: 0.0.0.0
-
-    http:
-      cors:
-        ~: true
-        origins: "https://gestion-medicamentos-frontend.onrender.com"
-        methods: GET,POST,PUT,DELETE,OPTIONS
-        headers: Content-Type,Authorization,X-Requested-With,Accept,Origin
-        exposed-headers: Content-Type,Authorization
-        access-control-allow-credentials: false
-
-    swagger-ui:
-      enabled: true
-      always-include: true
-      path: /swagger-ui
 
     datasource:
       db-kind: h2
@@ -94,6 +66,11 @@ mp:
         strategy: drop-and-create
       log:
         sql: false
+
+    swagger-ui:
+      enabled: true
+      always-include: true
+      path: /swagger-ui
 
     log:
       level: INFO
