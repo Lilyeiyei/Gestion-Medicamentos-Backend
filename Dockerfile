@@ -1,8 +1,9 @@
-# Paso 1: Usar una imagen oficial de Maven con Java 21 para compilar el proyecto
 FROM maven:3.9.6-eclipse-temurin-21 AS build
-COPY src /usr/src/app/src
-COPY pom.xml /usr/src/app
-RUN mvc -f /usr/src/app/pom.xml clean package -DskipTests
+WORKDIR /usr/src/app
+# Al usar WORKDIR, el punto (.) copia el pom de la raíz directo al directorio de trabajo
+COPY pom.xml .
+COPY src ./src
+RUN mvn clean package -DskipTests
 
 # Paso 2: Usar una imagen ligera de Java 21 para correr la aplicación
 FROM eclipse-temurin:21-jre-alpine
