@@ -23,6 +23,10 @@ public class MedicamentoService {
             throw new WebApplicationException("ID obligatorio", 400);
         }
 
+        if(medicamento.id <= 0){
+            throw new WebApplicationException("El ID debe ser mayor a 0", 400);
+        }
+
         Medicamento existeId = repository.findById(medicamento.id);
 
         if(existeId != null){
