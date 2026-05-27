@@ -6,6 +6,8 @@ quarkus:
   http:
     port: 8620
     host: localhost
+    # ¡LA LÍNEA MÁGICA! Enciende el filtro CORS al compilar
+    cors: true
     # Se eliminó el root-path para que responda en la raíz (ej: /formulas)
 
   datasource:
@@ -13,7 +15,7 @@ quarkus:
     username: admin
     password: 12345
     jdbc:
-      file: ./data/gdocentes_db
+      url: jdbc:h2:file:./data/gdocentes_db
 
   hibernate-orm:
     schema-management:
@@ -53,10 +55,11 @@ mp:
     http:
       port: ${PORT:8080}
       host: 0.0.0.0
-      cors: true
-      cors.origins: "https://gestion-medicamentos-frontend.onrender.com"
-      cors.methods: "GET,POST,PUT,DELETE,OPTIONS"
-      cors.headers: "accept, authorization, content-type, x-requested-with"
+      # Sintaxis YAML corregida (anidado en lugar de notación de puntos)
+      cors:
+        origins: "https://gestion-medicamentos-frontend.onrender.com"
+        methods: "GET,POST,PUT,DELETE,OPTIONS"
+        headers: "accept, authorization, content-type, x-requested-with"
 
     datasource:
       db-kind: h2
