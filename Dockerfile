@@ -5,8 +5,8 @@ WORKDIR /home/app
 # Copiamos todo el proyecto a la carpeta de trabajo
 COPY . .
 
-# Ejecutamos la compilación directa sin comandos raros de consola
-RUN mvn clean package -DskipTests
+# Forzamos a Maven a compilar ignorando configuraciones locales del sistema
+RUN mvn clean package -DskipTests -Dquarkus.package.type=fast-jar
 
 # ETAPA 2: Imagen de ejecución oficial de RedHat para Quarkus
 FROM registry.access.redhat.com/ubi9/openjdk-21-runtime:1.24
