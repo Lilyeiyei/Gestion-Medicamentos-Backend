@@ -65,9 +65,14 @@ mp:
 "%prod":
   quarkus:
     http:
-      port: ${PORT:8080}
+      port: ${PORT:8080}        # Render inyecta PORT automáticamente
       host: 0.0.0.0
       root-path: kick
+
+    swagger-ui:
+      enabled: true
+      always-include: true
+      path: /swagger-ui
 
     datasource:
       db-kind: h2
