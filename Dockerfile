@@ -2,9 +2,12 @@
 FROM maven:3.9.6-eclipse-temurin-21 AS build
 WORKDIR /app
 
-# Al estar dentro de /app, copiamos los archivos usando rutas relativas
+# 1. Copiamos PRIMERO el pom.xml para aprovechar la caché de Docker
 COPY pom.xml .
-COPY src ./src
+
+# 2. En lugar de buscar la carpeta "/src", copiamos TODO lo que esté en la raíz del proyecto
+# Esto incluye carpetas con mayúsculas/minúsculas (src, Src, SRC) de forma automática.
+COPY . .
 
 # Compilar omitiendo los tests para el despliegue rápido
 RUN mvn clean package -DskipTests
