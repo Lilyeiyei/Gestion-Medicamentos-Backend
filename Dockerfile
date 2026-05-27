@@ -1,23 +1,18 @@
-# ETAPA 1: Compilación
+# ETAPA 1: Compilación limpia
 FROM maven:3.9.6-eclipse-temurin-21 AS build
 WORKDIR /home/app
 
-# Copiamos absolutamente todo lo que venga de GitHub sin validar nada aún
+# Copiamos todo el proyecto a la carpeta de trabajo
 COPY . .
 
-USER root
-
-# Tu script estrella: Busca el pom.xml donde sea que esté y acomoda el proyecto
-RUN ACTUAL_PATH=$(find . -iname "pom.xml" -exec dirname {} \; | head -n 1) && \
-    echo "Proyecto encontrado en: $ACTUAL_PATH" && \
-    cp -r $ACTUAL_PATH/. . || true && \
-    mvn clean package -DskipTests
+# Ejecutamos la compilación directa sin comandos raros de consola
+RUN mvn clean package -DskipTests
 
 # ETAPA 2: Imagen de ejecución oficial de RedHat para Quarkus
 FROM registry.access.redhat.com/ubi9/openjdk-21-runtime:1.24
 ENV LANGUAGE='en_US:en'
 
-# Copiamos la carpeta completa de la aplicación generada
+# Copiamos los artefactos generados por Quarkus
 COPY --from=build /home/app/target/quarkus-app/ /deployments/
 
 EXPOSE 8080
