@@ -64,6 +64,28 @@ mp:
 # ─────────────────────────────────────────────────────
 "%prod":
   quarkus:
+    http:
+      port: ${PORT:8080}
+      host: 0.0.0.0
+      root-path: kick
+
+    datasource:
+      db-kind: h2
+      username: ${DB_USER:admin}
+      password: ${DB_PASSWORD:12345}
+      jdbc:
+        url: jdbc:h2:mem:gdocentes_db;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+
     hibernate-orm:
       schema-management:
-        strategy: drop-and-create   # OK porque la app arranca vacía
+        strategy: drop-and-create
+      log:
+        sql: false
+
+    log:
+      level: INFO
+      console:
+        enabled: true
+        format: "%d{yyyy-MM-dd HH:mm:ss,SSS} %-5p [%c{3.}] (%t) %s%e%n"
+      file:
+        enabled: false
